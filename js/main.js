@@ -1,50 +1,42 @@
-(function () {
-  var toggle = document.querySelector(".nav-toggle");
-  var nav = document.querySelector("#site-nav");
+(() => {
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.querySelector("#site-nav");
   if (toggle && nav) {
-    toggle.addEventListener("click", function () {
-      var open = nav.classList.toggle("is-open");
+    toggle.addEventListener("click", () => {
+      const open = nav.classList.toggle("is-open");
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
     });
-    nav.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
+    nav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
         nav.classList.remove("is-open");
         toggle.setAttribute("aria-expanded", "false");
       });
     });
   }
 
-  var form = document.querySelector("#contact-form");
+  const form = document.querySelector("#contact-form");
   if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var name = (form.querySelector("#name") || {}).value || "";
-      var email = (form.querySelector("#email") || {}).value || "";
-      var phone = (form.querySelector("#phone") || {}).value || "";
-      var dogType = (form.querySelector("#dog-type") || {}).value || "";
-      var program = (form.querySelector("#program") || {}).value || "";
-      var message = (form.querySelector("#message") || {}).value || "";
-
-      var subject = "Training inquiry from " + name.trim();
-      var body = [
-        "Name: " + name.trim(),
-        "Email: " + email.trim(),
-        "Phone: " + (phone.trim() || "(not provided)"),
-        "Dog type: " + dogType,
-        "Program interest: " + program,
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const name = (data.get("name") || "").toString().trim();
+      const phone = (data.get("phone") || "").toString().trim();
+      const email = (data.get("email") || "").toString().trim();
+      const interest = (data.get("interest") || "").toString().trim();
+      const message = (data.get("message") || "").toString().trim();
+      const lines = [
+        `Name: ${name}`,
+        `Phone: ${phone}`,
+        `Email: ${email}`,
+        `Interest: ${interest}`,
         "",
-        "Message:",
-        message.trim()
-      ].join("\n");
-
-      var mailto =
-        "mailto:theryanmckenzie@gmail.com" +
-        "?subject=" +
-        encodeURIComponent(subject) +
-        "&body=" +
-        encodeURIComponent(body);
-
-      window.location.href = mailto;
+        message,
+      ];
+      const body = encodeURIComponent(lines.join("\n"));
+      const subject = encodeURIComponent(`Acadia inquiry — ${interest || "General"}`);
+      const to = form.getAttribute("data-mailto") || "";
+      if (!to) return;
+      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
     });
   }
 })();
