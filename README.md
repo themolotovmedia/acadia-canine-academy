@@ -1,2 +1,3 @@
-# acadia-canine-academy
-Public static site for Acadia Canine Academy (acadiacanineacademy.com)
+# Acadia Canine Academy
+
+Public static site for [acadiacanineacademy.com](https://acadiacanineacademy.com).
